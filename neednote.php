@@ -3,7 +3,7 @@
 Plugin Name: Neednote
 Plugin URI: http://neednote.godado.it
 Description: Automaticamente aggiunge i pulsanti, i form e le ultime domande correlate di neednote ai posts.
-Version: 1.0
+Version: 1.1
 Author: Giuseppe Argento
 Author URI: http://www.4mj.it
 
@@ -42,7 +42,6 @@ $neednote_files = Array(
 	'description_selection.js',
 	'neednote-admin.css',
 	'neednote.php',
-	'wists.js',
 	'images/',
 	'images/1.gif',
 	'images/2.gif',
@@ -198,12 +197,6 @@ if (is_array($neednote_contitionals) and in_array(true, $neednote_contitionals))
 
 // Hook wp_head to add css
 add_action('wp_head', 'neednote_wp_head');
-function neednote_wp_head() {
-	global $neednotepluginpath;
-	if (in_array('Wists', get_option('neednote_active_sites'))) {
-		echo '<script language="JavaScript" type="text/javascript" src="' . $neednotepluginpath . 'wists.js"></script>'."\n";
-	}
-}
 
 // load wp rss functions for update checking.
 if (!function_exists('parse_w3cdtf')) {
