@@ -3,7 +3,7 @@
 Plugin Name: Neednote
 Plugin URI: http://neednote.godado.it
 Description: Automaticamente aggiunge i pulsanti, i form e le ultime domande correlate di neednote ai posts.
-Version: 1.0
+Version: 1.1
 Author: Giuseppe Argento
 Author URI: http://www.4mj.it
 

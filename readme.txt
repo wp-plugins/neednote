@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=peppolon
 Tags: social, bookmark
 Requires at least: 1.5
 Tested up to: 2.7
-Stable tag: 1.0
+Stable tag: 1.1
 
 Automaticamente aggiunge i pulsanti, i form e le ultime domande correlate di neednote ai posts.
 
