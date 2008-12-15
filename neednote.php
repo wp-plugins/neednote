@@ -2,7 +2,8 @@
 /*
 Plugin Name: Neednote.it
 Plugin URI: http://neednote.godado.it
-Description: Automaticamente aggiunge i pulsanti, i form e le ultime domande correlate di neednote ai posts.
+Description: Aggiunge automaticamente i pulsanti o i form di NeedNote.it ai post. E' possibile scegliere le posizioni in cui vuoi che lo script appaia in automatico e si può anche decidere di non farlo visualizzare in qualche post specifico.
+Alta personalizzazione in base alle esigenze del proprio blog.
 Version: 1.1
 Author: Giuseppe Argento
 Author URI: http://www.4mj.it
