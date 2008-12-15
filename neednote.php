@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Neednote
+Plugin Name: Neednote.it
 Plugin URI: http://neednote.godado.it
 Description: Automaticamente aggiunge i pulsanti, i form e le ultime domande correlate di neednote ai posts.
 Version: 1.1
@@ -107,8 +107,6 @@ function neednote_html($display=Array()) {
 	
 	$title 		= urlencode($post->post_title);
 	$title 		= str_replace('+','%20',$title);
-	
-	$rss 		= urlencode(get_bloginfo('ref_url'));
 
 	$html .= "\n<div class=\"neednote\">\n";
 	
@@ -147,7 +145,6 @@ function neednote_html($display=Array()) {
 		$url = str_replace('NEEDLG', $needlg, $url);
 		$url = str_replace('NEEDLG2', $needlg2, $url);
 		$url = str_replace('TITLE', $title, $url);
-		$url = str_replace('RSS', $rss, $url);
 		$url = str_replace('BLOGNAME', $blogname, $url);
 		$url = str_replace('EXCERPT', $excerpt, $url);
 
@@ -178,7 +175,6 @@ $neednote_contitionals = get_option('neednote_conditionals');
 if (is_array($neednote_contitionals) and in_array(true, $neednote_contitionals)) {
 	add_filter('the_content', 'neednote_display_hook');
 	add_filter('the_excerpt', 'neednote_display_hook');
-	// add_filter('the_excerpt_rss', 'neednote_display_hook');
 	
 	function neednote_display_hook($content='') {
 		$conditionals = get_option('neednote_conditionals');
@@ -195,13 +191,6 @@ if (is_array($neednote_contitionals) and in_array(true, $neednote_contitionals))
 	}
 }
 
-// Hook wp_head to add css
-add_action('wp_head', 'neednote_wp_head');
-
-// load wp rss functions for update checking.
-if (!function_exists('parse_w3cdtf')) {
-	require_once(ABSPATH . WPINC . '/rss-functions.php');
-}
 
 // Plugin config/data setup
 register_activation_hook(__FILE__, 'neednote_activation_hook');
@@ -260,8 +249,6 @@ function neednote_restore_config($force=False) {
 			'is_search' => False,
 		));
 
-	if ($force or !is_bool(get_option('usecss')))
-		update_option('neednote_usecss', true);
 }
 
 // Hook the admin_menu display to add admin page
@@ -464,12 +451,6 @@ function neednote_submenu() {
 		if (!$_REQUEST['needlg2'])
 			$_REQUEST['needlg2'] = "";
 		update_option('neednote_needlg2', $_REQUEST['needlg2']);
-
-		if (!$_REQUEST['usecss'])
-			$usecss = false;
-		else
-			$usecss = true;
-		update_option('neednote_usecss', $usecss);
 		
 		neednote_message(__("Saved changes.", 'neednote'));
 	}
@@ -632,11 +613,6 @@ function neednote_submenu() {
 </form>
 
 <?php
-}
-
-if (get_option('neednote_usecss_set_once') != true) {
-	update_option('neednote_usecss', true);
-	update_option('neednote_usecss_set_once', true);
 }
 
 ?>

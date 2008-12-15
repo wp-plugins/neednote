@@ -6,7 +6,9 @@ Requires at least: 1.5
 Tested up to: 2.7
 Stable tag: 1.1
 
-Automaticamente aggiunge i pulsanti, i form e le ultime domande correlate di neednote ai posts.
+Aggiunge automaticamente i pulsanti o i form di NeedNote.it ai post.
+E' possibile scegliere le posizioni in cui vuoi che lo script appaia in automatico e si può anche decidere di non farlo visualizzare in qualche post specifico.
+Alta personalizzazione in base alle esigenze del proprio blog. [Plugin Homepage](http://www.neednote.it "www.neednote.it")
 
 == Description ==
 
