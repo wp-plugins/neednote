@@ -7,9 +7,7 @@ Alta personalizzazione in base alle esigenze del proprio blog.
 Version: 1.1
 Author: Giuseppe Argento
 Author URI: http://www.4mj.it
-
 */
-
 // Pre-2.6 compatibility
 if ( !defined('WP_CONTENT_URL') )
     define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
@@ -18,12 +16,10 @@ if ( !defined('WP_CONTENT_DIR') )
  
 // Guess the location
 $neednotepluginpath = WP_CONTENT_URL.'/plugins/'.plugin_basename(dirname(__FILE__)).'/';
-
 function neednote_init_locale(){
 	load_plugin_textdomain('neednote', $neednotepluginpath);
 }
 add_filter('init', 'neednote_init_locale');
-
 $neednote_known_sites = Array(
 	'Icona' => Array(
 		'favicon' => '2.gif',
@@ -38,7 +34,6 @@ $neednote_known_sites = Array(
 		'url' => 'http://neednote.godado.it/sharing-js.php?act=LASTQUEST&id=NEEDID&w=NEEDLG2&color=NEEDCOLORE2',
 	),
 );
-
 $neednote_files = Array(
 	'description_selection.js',
 	'neednote-admin.css',
@@ -70,21 +65,15 @@ $neednote_files = Array(
 	'images/24.gif',
 	'images/25.gif',
 );
-
 function neednote_html($display=Array()) {
 	global $neednote_known_sites, $neednotepluginpath, $wp_query, $post; 
-
 	$neednoteooffmeta = get_post_meta($post->ID,'neednoteoff',true);
 	if ($neednoteooffmeta == "true") {
 		return "";
 	}
-
 	$active_sites = get_option('neednote_active_sites');
-
 	$html = "";
-
 	$imagepath = $neednotepluginpath.'images/';
-
 	// if no sites are specified, display all active
 	// have to check $active_sites has content because WP
 	// won't save an empty array as an option
@@ -93,7 +82,6 @@ function neednote_html($display=Array()) {
 	// if no sites are active, display nothing
 	if (empty($display))
 		return "";
-
 	// Load the post's data
 	$blogname 	= urlencode(get_bloginfo('name')." ".get_bloginfo('description'));
 	$post 		= $wp_query->post;
@@ -108,7 +96,6 @@ function neednote_html($display=Array()) {
 	
 	$title 		= urlencode($post->post_title);
 	$title 		= str_replace('+','%20',$title);
-
 	$html .= "\n<div class=\"neednote\">\n";
 	
 	$tagline = get_option("neednote_tagline");
@@ -117,7 +104,6 @@ function neednote_html($display=Array()) {
 		$html .= stripslashes($tagline);
 		$html .= "\n</div>";
 	}
-
 	$needid = get_option("neednote_needid");
 	$needicona = get_option("neednote_needicona");
 	$needcolore1 = get_option("neednote_needcolore1");
@@ -126,17 +112,13 @@ function neednote_html($display=Array()) {
 	$needcolore2 = str_replace('#','',$needcolore2);
 	$needlg = get_option("neednote_needlg");
 	$needlg2 = get_option("neednote_needlg2");
-
 	
 	$html .= "\n<ul>\n";
-
 	foreach($display as $sitename) {
 		// if they specify an unknown or inactive site, ignore it
 		if (!in_array($sitename, $active_sites))
 			continue;
-
 		$site = $neednote_known_sites[$sitename];
-
 		$url = $site['url'];
 		$url = str_replace('PERMALINK', $permalink, $url);
 		$url = str_replace('NEEDID', $needid, $url);
@@ -148,7 +130,6 @@ function neednote_html($display=Array()) {
 		$url = str_replace('TITLE', $title, $url);
 		$url = str_replace('BLOGNAME', $blogname, $url);
 		$url = str_replace('EXCERPT', $excerpt, $url);
-
 		if (isset($site['description']) && $site['description'] != "") {
 			$description = $site['description'];
 		} else {
@@ -165,12 +146,9 @@ function neednote_html($display=Array()) {
 		
 		$html .= "\t".apply_filters('neednote_link',$link)."\n";
 	}
-
 	$html .= "</ul>\n</div>\n";
-
 	return $html;
 }
-
 // Hook the_content to output html if we should display on any page
 $neednote_contitionals = get_option('neednote_conditionals');
 if (is_array($neednote_contitionals) and in_array(true, $neednote_contitionals)) {
@@ -191,53 +169,40 @@ if (is_array($neednote_contitionals) and in_array(true, $neednote_contitionals))
 		return $content;
 	}
 }
-
-
 // Plugin config/data setup
 register_activation_hook(__FILE__, 'neednote_activation_hook');
-
 function neednote_activation_hook() {
 	return neednote_restore_config(False);
 }
-
 // restore built-in defaults, optionally overwriting existing values
 function neednote_restore_config($force=False) {
 	// Load defaults, taking care not to smash already-set options
 	global $neednote_known_sites;
-
 	if ($force or !is_array(get_option('neednote_active_sites')))
 		update_option('neednote_active_sites', array(
 			'Icona',
 		));
-
 	// tagline defaults to a Hitchiker's Guide to the Galaxy reference
 	if ($force or !is_string(get_option('neednote_tagline')))
 		update_option('neednote_tagline', "<strong>" . __("Hai domande su questo argomento?", 'neednote') . "</strong>");
-
 	// needid
 	if ($force or !is_string(get_option('neednote_needid')))
 		update_option('neednote_needid', "" . __("0", 'neednote') . "");
-
 	// needicona
 	if ($force or !is_string(get_option('neednote_needicona')))
 		update_option('neednote_needicona', "" . __("1", 'neednote') . "");
-
 	// needcolore1
 	if ($force or !is_string(get_option('neednote_needcolore1')))
 		update_option('neednote_needcolore1', "" . __("#000000", 'neednote') . "");
-
 	// needcolore2
 	if ($force or !is_string(get_option('neednote_needcolore2a')))
 		update_option('neednote_needcolore2', "" . __("#000000", 'neednote') . "");
-
 	// needlg
 	if ($force or !is_string(get_option('neednote_needlg')))
 		update_option('neednote_needlg', "" . __("200", 'neednote') . "");
-
 	// needlg2
 	if ($force or !is_string(get_option('neednote_needlg2')))
 		update_option('neednote_needlg2', "" . __("200", 'neednote') . "");
-
 	// only display on single posts and pages by default
 	if ($force or !is_array(get_option('neednote_conditionals')))
 		update_option('neednote_conditionals', array(
@@ -249,21 +214,17 @@ function neednote_restore_config($force=False) {
 			'is_date' => False,
 			'is_search' => False,
 		));
-
 }
-
 // Hook the admin_menu display to add admin page
 add_action('admin_menu', 'neednote_admin_menu');
 function neednote_admin_menu() {
 	add_submenu_page('options-general.php', 'neednote', 'Neednote', 8, 'neednote', 'neednote_submenu');
 }
-
 // Admin page header
 add_action('admin_head', 'neednote_admin_head');
 function neednote_admin_head() {
 	if ($_GET['page'] == 'neednote') {
 		global $neednotepluginpath, $wp_version;
-
 		if ($wp_version < "2.6") { 
 			echo '<script language="JavaScript" type="text/javascript" src="'.$neednotepluginpath.'jquery/jquery.js"></script>';
 		} 
@@ -276,7 +237,6 @@ function neednote_admin_head() {
 	/* make checkbox action prettier */
 	function toggle_checkbox(id) {
 		var checkbox = document.getElementById(id);
-
 		checkbox.checked = !checkbox.checked;
 		if (checkbox.checked)
 			checkbox.parentNode.className = 'active';
@@ -290,22 +250,18 @@ function neednote_admin_head() {
 <?php
 	}
 }
-
 function neednote_message($message) {
 	echo "<div id=\"message\" class=\"updated fade\"><p>$message</p></div>\n";
 }
-
 // Sanity check the upload worked
 function neednote_upload_errors() {
 	global $neednote_files;
-
 	$cwd = getcwd(); // store current dir for restoration
 	if (!@chdir('../wp-content/plugins'))
 		return __("Couldn't find wp-content/plugins folder. Please make sure WordPress is installed correctly.", 'neednote');
 	if (!is_dir('neednote'))
 		return __("Can't find neednote folder.", 'neednote');
 	chdir('neednote');
-
 	foreach($neednote_files as $file) {
 		if (substr($file, -1) == '/') {
 			if (!is_dir(substr($file, 0, strlen($file) - 1)))
@@ -313,17 +269,12 @@ function neednote_upload_errors() {
 		} else if (!is_file($file))
 		return __("Can't find file:", 'neednote') . " <kbd>$file</kbd>";
 	}
-
-
 	$header_filename = '../../themes/' . get_option('template') . '/header.php';
 	if (!file_exists($header_filename) or strpos(@file_get_contents($header_filename), 'wp_head()') === false)
 		return __("Your theme isn't set up for neednote to load its style. Please edit <kbd>header.php</kbd> and add a line reading <kbd>&lt?php wp_head(); ?&gt;</kbd> before <kbd>&lt;/head&gt;</kbd> to fix this.", 'neednote');
-
 	chdir($cwd); // restore cwd
-
 	return false;
 }
-
 function neednote_meta() {
 	global $post;
 	$neednoteoff = false;
@@ -335,7 +286,6 @@ function neednote_meta() {
 	<input type="checkbox" name="neednoteoff" <?php if ($neednoteoff) { echo 'checked="checked"'; } ?>/> Disabilita neednote 
 	<?php
 }
-
 function neednote_option() {
 	global $post;
 	$neednoteoff = false;
@@ -353,7 +303,6 @@ function neednote_option() {
 	<?php 
 	}
 }
-
 function neednote_meta_box() {
 	// Check whether the 2.5 function add_meta_box exists, and if it doesn't use 2.3 functions.
 	if ( function_exists('add_meta_box') ) {
@@ -365,7 +314,6 @@ function neednote_meta_box() {
 	}
 }
 add_action('admin_menu', 'neednote_meta_box');
-
 function neednote_insert_post($pID) {
 	if (isset($_POST['neednoteoff'])) {
 		add_post_meta($pID,'neednoteoff',"true", true) or update_post_meta($pID, 'neednoteoff', "true");
@@ -374,11 +322,9 @@ function neednote_insert_post($pID) {
 	}
 }
 add_action('wp_insert_post', 'neednote_insert_post');
-
 // The admin page
 function neednote_submenu() {
 	global $neednote_known_sites, $neednote_date, $neednote_files, $neednotepluginpath;
-
 	// update options in db if requested
 	if ($_REQUEST['restore']) {
 		check_admin_referer('neednote-config');
@@ -397,7 +343,6 @@ function neednote_submenu() {
 		// (sorting does not influence associated array equality in PHP)
 		delete_option('neednote_active_sites', $active_sites);
 		add_option('neednote_active_sites', $active_sites);
-
 		if ($_POST['usetargetblank']) {
 			update_option('neednote_usetargetblank',true);
 		} else {
@@ -417,37 +362,30 @@ function neednote_submenu() {
 			$conditionals[$condition] = array_key_exists($condition, $_POST['conditionals']);
 			
 		update_option('neednote_conditionals', $conditionals);
-
 		// update tagline
 		if (!$_REQUEST['tagline'])
 			$_REQUEST['tagline'] = "";
 		update_option('neednote_tagline', $_REQUEST['tagline']);
-
 		// update needid
 		if (!$_REQUEST['needid'])
 			$_REQUEST['needid'] = "";
 		update_option('neednote_needid', $_REQUEST['needid']);
-
 		// update needicona
 		if (!$_REQUEST['needicona'])
 			$_REQUEST['needicona'] = "";
 		update_option('neednote_needicona', $_REQUEST['needicona']);
-
 		// update needcolore1
 		if (!$_REQUEST['needcolore1'])
 			$_REQUEST['needcolore1'] = "";
 		update_option('neednote_needcolore1', $_REQUEST['needcolore1']);
-
 		// update needcolore2
 		if (!$_REQUEST['needcolore2'])
 			$_REQUEST['needcolore2'] = "";
 		update_option('neednote_needcolore2', $_REQUEST['needcolore2']);
-
 		// update needlg
 		if (!$_REQUEST['needlg'])
 			$_REQUEST['needlg'] = "";
 		update_option('neednote_needlg', $_REQUEST['needlg']);
-
 		// update needlg2
 		if (!$_REQUEST['needlg2'])
 			$_REQUEST['needlg2'] = "";
@@ -455,7 +393,6 @@ function neednote_submenu() {
 		
 		neednote_message(__("Saved changes.", 'neednote'));
 	}
-
 	if ($str = neednote_upload_errors())
 		neednote_message("$str</p><p>" . __("In your plugins/neednote folder, you must have these files:", 'neednote') . ' <pre>' . implode("\n", $neednote_files) ); 
 	
@@ -467,7 +404,6 @@ function neednote_submenu() {
 		unset($disabled[$site]);
 	}
 	uksort($disabled, "strnatcasecmp");
-
 	// load options from db to display
 	$tagline 		= stripslashes(get_option('neednote_tagline'));
 	$needid 		= stripslashes(get_option('neednote_needid'));
@@ -486,7 +422,6 @@ function neednote_submenu() {
 	if ( function_exists('wp_nonce_field') )
 		wp_nonce_field('neednote-config');
 ?>
-
 <div class="wrap">
 	<h2><?php _e("Opzioni Neednote", 'neednote'); ?></h2>
 	<table class="form-table">
@@ -502,10 +437,7 @@ function neednote_submenu() {
 	</tr>
 	<tr>
 		<th style="margin-bottom:0; border-bottom-width:0;"><?php _e("Opzioni:", "neednote"); ?></th>
-		<td style="margin-bottom:0; border-bottom-width:0;"><?php _e("Seleziona il metodo che vuoi utilizzare. Puoi anche trascinare le icone per decidere l'ordine", 'neednote'); ?></td>
-	</tr>
-	<tr>
-		<td colspan="2">
+		<td style="margin-bottom:0; border-bottom-width:0;"><?php _e("Seleziona il metodo che vuoi utilizzare. Puoi anche trascinare le icone per decidere l'ordine", 'neednote'); ?><br/><br/>
 			<ul id="neednote_site_list">
 				<?php foreach (array_merge($active, $disabled) as $sitename=>$site) { ?>
 					<li style="font-size:10px;"
@@ -610,10 +542,7 @@ function neednote_submenu() {
 	</tr>
 </table>
 </div>
-
 </form>
-
 <?php
 }
-
 ?>

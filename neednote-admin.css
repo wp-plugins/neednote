@@ -6,7 +6,6 @@
 }
 #neednote_site_list li {
 	cursor: move;
-	float: left;
 	margin: 2px 2px 0 0;
 	width: 15em;
 	height: 20px;
@@ -56,17 +55,12 @@
 }
 h2 { margin: 0px; padding: 10px; font-family: Georgia, "Times New Roman", Times, serif; font-size: 200%; font-weight: normal; color: #FFF; background-color: #CCC; border-bottom: #BBB 2px solid; }
 p#copyright { margin: 20px 10px; font-size: 90%; color: #999; }
-
 /* Form styles */
 div.form-container { margin: 10px; padding: 5px; background-color: #FFF; }
-
 p.legend { margin-bottom: 1em; }
 p.legend em { color: #C00; font-style: normal; }
-
 div.form-container div.controlset {display: block; float:left; width: 100%; padding: 0.25em 0;}
-
 div.form-container div.controlset label, 
 div.form-container div.controlset input,
 div.form-container div.controlset div { display: inline; float: left; }
-
 div.form-container div.controlset label { width: 100px;}
